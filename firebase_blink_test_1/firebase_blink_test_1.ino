@@ -2,8 +2,9 @@
 #include "FirebaseESP32.h"
 
 
-#define FIREBASE_HOST "xxxxt.firebaseio.com" //Change to your Firebase RTDB project ID e.g. Your_Project_ID.firebaseio.com
-#define FIREBASE_AUTH "xxxx" //Change to your Firebase RTDB secret password
+
+#define FIREBASE_HOST "xxx.firebaseio.com" //Change to your Firebase RTDB project ID e.g. Your_Project_ID.firebaseio.com
+#define FIREBASE_AUTH "xxx" //Change to your Firebase RTDB secret password
 #define WIFI_SSID "xxxx"
 #define WIFI_PASSWORD "xxxx"
 
@@ -59,7 +60,7 @@ void setup()
   Serial.println();
   Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
   Firebase.reconnectWiFi(true);
-  if (!Firebase.beginStream(firebaseData1))
+  if (!Firebase.beginStream(firebaseData1, "start"))
   {
     Serial.println("Could not begin stream");
     Serial.println("REASON: " + firebaseData1.errorReason());
@@ -67,20 +68,15 @@ void setup()
   }
   Firebase.setStreamCallback(firebaseData1, streamCallback, streamTimeoutCallback);
 }
-
+void getStartState() {}
 void loop()
 {
-  // get start state
   if (Firebase.getBool(firebaseData1, "/start")) {
-    Serial.println("start state: "+firebaseData1.boolData());
+    Serial.println("start state: ");
+    Serial.println( firebaseData1.boolData());
+
   } else {
-    Serial.println("error geting start state:" + firebaseData1.errorReason());
+    Serial.println("start error state: " );
+    Serial.println( firebaseData1.errorReason());
   }
-    // get stack0 state
-  if (Firebase.getBool(firebaseData1, "/start")) {
-    Serial.println("start state: "+firebaseData1.boolData());
-  } else {
-    Serial.println("error geting start state:" + firebaseData1.errorReason());
-  }
-  
 }
